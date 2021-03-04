@@ -26,18 +26,20 @@ export const main = async (props: Props) => {
   // Pocketを取得する
   const pocket = new Pocket(props.pocketConsumerKey, props.pocketRequestToken, props.pocketAccessToken);
   await pocket.auth();
-  const pockets = Object.values(await pocket.get()).reverse();
+  const pockets = Object.values(await pocket.get());
 
   // 今週の記事データに追記する
   body = addHeadlines(postDate, body, pockets);
 
   // 今週の記事を更新する
-  await growi.updatePage(page._id, body, page.revision._id);
-  console.log(`Access: ${growi.getUrlByPath(path)}`);
+  if (body != page.revision.body) {
+    await growi.updatePage(page._id, body, page.revision._id);
+    console.log(`Access: ${growi.getUrlByPath(path)}`);
+  }
 }
 
 const getPath = (day: Dayjs) => {
-  return day.format('/autoweekly/YYYY/MM/DD');
+  return `/autoweekly/${day.format('YYYY/MM/DD')}`;
 }
 
 // 次の金曜日
@@ -46,6 +48,8 @@ const getNextFriday = (now=dayjs()) => {
 }
 
 const addHeadlines = (postDay: Dayjs, body: string, pockets: PocketItem[]) => {
+  // 追加日時で降順である必要がある
+  pockets = pockets.sort((a,b) => Number(a.time_added) - Number(b.time_added)).reverse();
   for (const pocket of pockets) {
     const { title, url } = parsePocketItem(pocket);
     // 記事の掲載が既にあるなら、そこで終わり
