@@ -5,6 +5,7 @@ Pocketに保存されたURLを1週間分まとめてGrowiの記事にする
 ```bash
 $ cp .env.example .env
 $ vi .env
+$ docker-compose run --rm app npm install
 ```
 
 ## Exec
