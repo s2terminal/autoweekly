@@ -1,6 +1,31 @@
 import axios from 'axios';
 const querystring = require('querystring');
 
+export type PocketItem = {
+  item_id: string,
+  resolved_id: string,
+  given_url: string,
+  given_title: string,
+  favorite: string,
+  status: string,
+  time_added: string,
+  time_updated: string,
+  time_read: string,
+  time_favorited: string,
+  sort_id: string,
+  resolved_title: string,
+  resolved_url: string,
+  excerpt: string,
+  is_article: string,
+  is_index: string,
+  has_video: string,
+  has_image: string,
+  word_count: string,
+  lang: string,
+  top_image_url: string,
+  listen_duration_estimate: string,
+}
+
 export class Pocket {
   protected consumerKey: string;
   protected requestToken: string | undefined;
@@ -17,20 +42,21 @@ export class Pocket {
     }
   }
 
-  public async get() {
-    if (!this.accessToken) { return false }
+  public async get(count: number=100): Promise<{ [key: string]: PocketItem }> {
+    if (!this.accessToken) { throw Error('There is no access token. use Pocket.auth()') }
     const url = 'https://getpocket.com/v3/get';
     const params = {
       'consumer_key': this.consumerKey,
       'access_token': this.accessToken,
       'sort': 'newest',
-      'count': 100
+      'count': count
     };
     const res = await axios.get(url, { params });
 
-    return res;
+    return res.data.list;
   }
 
+  // @see https://getpocket.com/developer/docs/authentication
   public async auth() {
     if (this.accessToken) {
       return true;
@@ -72,4 +98,10 @@ export class Pocket {
     const values = querystring.parse(responseBody) as { access_token: string, username: string };
     return values.access_token;
   }
+}
+
+export const parsePocketItem = (pocket: PocketItem) => {
+  const title = pocket.given_title.length > 0 ? pocket.given_title : pocket.resolved_title;
+  const url = pocket.given_url.length > 0 ? pocket.given_url : pocket.resolved_url;
+  return { title, url };
 }
