@@ -16,6 +16,7 @@ export const main = async (props: Props) => {
   // 今週のパスを定義する
   const postDate = getNextFriday();
   const path = getPath(postDate);
+  console.log(`path: ${path}`);
 
   // 今週の記事を作成する
   await growi.createPage(path, '## 今週のニューストピックス');
@@ -43,8 +44,13 @@ const getPath = (day: Dayjs) => {
 }
 
 // 次の金曜日
-const getNextFriday = (now=dayjs()) => {
-  return now.subtract((now.day()-5)%7, 'day');
+export const getNextFriday = (now=dayjs()) => {
+  // now.day()は日曜日ゼロ。金曜は5
+  const day = now.day();
+  return now.add(
+    (5-day) + Math.floor((day+2)/7)*7,
+    'day'
+  );
 }
 
 const addHeadlines = (postDay: Dayjs, body: string, pockets: PocketItem[]) => {
@@ -57,7 +63,7 @@ const addHeadlines = (postDay: Dayjs, body: string, pockets: PocketItem[]) => {
       break;
     }
     // 記事の掲載日の1週間前より古い(時刻が小さい)なら、そこで終わり
-    if (dayjs.unix(Number(pocket.time_added)) < postDay.subtract(7, 'day')) {
+    if (dayjs.unix(Number(pocket.time_added)) < postDay.subtract(8, 'day')) {
       break;
     }
     const headline = `

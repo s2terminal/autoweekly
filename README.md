@@ -12,3 +12,8 @@ $ docker-compose run --rm app npm install
 ```
 $ docker-compose run --rm app npm run start
 ```
+
+## Testing
+```
+$ docker-compose run --rm app npm run test
+```
