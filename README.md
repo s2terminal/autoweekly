@@ -5,13 +5,14 @@ Pocketに保存されたURLを1週間分まとめてGrowiの記事にする
 ```bash
 $ cp .env.example .env
 $ vi .env
-$ docker-compose run --rm app npm install
+$ docker-compose build
 ```
 
 ## Exec
 ```
-$ docker-compose run --rm app npm run start
+$ docker-compose up
 ```
+access http://localhost:8080/autoweekly
 
 ## Testing
 ```

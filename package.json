@@ -4,7 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && node dist/index.js",
+    "start": "npm run build && node dist/index.js",
+    "build": "tsc --project tsconfig.json",
+    "server": "npm run build && node dist/server.js",
     "test": "jest"
   },
   "author": "s2terminal",
@@ -13,6 +15,7 @@
     "@types/node": "^14.14.31",
     "axios": "^0.21.1",
     "dayjs": "^1.10.4",
+    "fastify": "^3.15.1",
     "typescript": "^4.2.2"
   },
   "devDependencies": {

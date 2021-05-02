@@ -1,13 +1,15 @@
 version: '3'
 services:
   app:
-    image: node:alpine
+    build: .
     volumes:
       - .:/app
-    working_dir: /app
     environment:
-     - GROWI_APP_SITE_URL=${GROWI_APP_SITE_URL}
-     - GROWI_ACCESS_TOKEN=${GROWI_ACCESS_TOKEN}
-     - POCKET_CONSUMER_KEY=${POCKET_CONSUMER_KEY}
-     - POCKET_REQUEST_TOKEN=${POCKET_REQUEST_TOKEN}
-     - POCKET_ACCESS_TOKEN=${POCKET_ACCESS_TOKEN}
+      - GROWI_APP_SITE_URL=${GROWI_APP_SITE_URL}
+      - GROWI_ACCESS_TOKEN=${GROWI_ACCESS_TOKEN}
+      - POCKET_CONSUMER_KEY=${POCKET_CONSUMER_KEY}
+      - POCKET_REQUEST_TOKEN=${POCKET_REQUEST_TOKEN}
+      - POCKET_ACCESS_TOKEN=${POCKET_ACCESS_TOKEN}
+    ports:
+      - 8080:8080
+    command: npm run server

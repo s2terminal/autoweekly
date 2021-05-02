@@ -10,13 +10,12 @@ type Props = {
   pocketAccessToken: string
 }
 
-export const main = async (props: Props) => {
+export const main = async (props: Props): Promise<string | void> => {
   const growi = new Growi(props.growiAppSiteUrl, props.growiAccessToken);
 
   // 今週のパスを定義する
   const postDate = getNextFriday();
   const path = getPath(postDate);
-  console.log(`path: ${path}`);
 
   // 今週の記事を作成する
   await growi.createPage(path, '## 今週のニューストピックス');
@@ -36,6 +35,7 @@ export const main = async (props: Props) => {
   if (body != page.revision.body) {
     await growi.updatePage(page._id, body, page.revision._id);
     console.log(`Access: ${growi.getUrlByPath(path)}`);
+    return growi.getUrlByPath(path);
   }
 }
 
