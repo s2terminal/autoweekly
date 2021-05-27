@@ -35,8 +35,8 @@ export const main = async (props: Props): Promise<string | void> => {
   if (body != page.revision.body) {
     await growi.updatePage(page._id, body, page.revision._id);
     console.log(`Access: ${growi.getUrlByPath(path)}`);
-    return growi.getUrlByPath(path);
   }
+  return growi.getUrlByPath(path);
 }
 
 const getPath = (day: Dayjs) => {

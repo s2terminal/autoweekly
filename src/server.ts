@@ -11,7 +11,10 @@ server.get('/autoweekly', async (request, reply) => {
     'pocketRequestToken': process.env.POCKET_REQUEST_TOKEN as string,
     'pocketAccessToken': process.env.POCKET_ACCESS_TOKEN as string,
   });
-  return `Access: ${resultPath}`;
+  if (resultPath) {
+    reply.redirect(resultPath);
+  }
+  return `failed ${resultPath}`;
 });
 
 server.listen(8080, '0.0.0.0', (err, address) => {
